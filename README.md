@@ -1,23 +1,129 @@
-# entrega-avaliativa
-Repositório usado para armazenar, organizar e versionar a atividade avaliativa da Julia e do Arthur
-Arthur Herculano Zacarias Rocha RA: 04241063
-Julia Costa Apolinário RA: 04241006
-Como enviar uma mensagem para teste (endpoint do produtor):
-URL usada no insomnia: POST http://localhost:8080/api/shameless/send
-Configure como Post e na aba Body configure como Json. No nosso projeto estamos usando um Json bem simples
-como "Mensagem que deve ser enviada"
+# Projeto RabbitMQ – Série Shameless 🧩
 
+## Integrantes
 
-URL do endpoint de publicação, exemplo: (ex.: POST http://localhost:8080/xpto).
+- **Júlia Costa** – RA: 04201006  
+- **Arthur Herculano** – RA: 04201063
 
-Método HTTP e headers necessários (se houver).
+---
 
-Exemplo de JSON a ser enviado.
+## Descrição
 
-Passo a passo para subir o ambiente (ex.: docker compose up -d) e executar ambos os serviços.
+Este projeto demonstra a comunicação entre duas aplicações utilizando **RabbitMQ** como sistema de mensageria.
 
-PASSO A PASSO PARA UTILIZAR A APLICAÇÂO:
-Primeiro abra a sua IDE favorita de java e abra o pom.xml do projeto.
-depois, abra a pasta do consumidor em C# no Vs Code de preferência, se você nunca rodou um projeto em C#, você vai precisar baixar o .NET para rodar o mesmo, eu baixei a versão x64 no site: "https://dotnet.microsoft.com/en-us/download/dotnet/8.0"
+- **Produtor (Java Spring Boot):** envia mensagens sobre personagens da série *Shameless*.
+- **Consumidor (C# .NET 8):** recebe as mensagens da fila e permite visualizá-las através de um endpoint HTTP.
 
-Exemplo de retorno esperado e como verificar a mensagem no consumidor(Endpoint GET).
+---
+
+## 🐇 Comunicação
+
+- **Fila:** `fila.shameless`
+- **Exchange:** pode ser `direct`, `topic` ou `fanout` (não obrigatório para o funcionamento básico)
+- **Protocolo:** AMQP (via RabbitMQ)
+
+---
+
+## 🚀 Como enviar uma mensagem (Produtor)
+
+**Endpoint do produtor:**
+
+```
+POST http://localhost:8080/api/shameless/send
+```
+
+**Método HTTP:** `POST`  
+**Headers:**  
+```
+Content-Type: application/json
+```
+
+**Exemplo de JSON a ser enviado:**
+```
+"Mensagem teste"
+```
+
+---
+
+## 🧱 Como subir o ambiente
+
+1. **Subir o RabbitMQ via Docker**
+   ```bash
+   docker compose up -d
+   ```
+   *(certifique-se de que o `compose.yaml` está na raiz do projeto e contém o serviço do RabbitMQ)*
+
+2. **Executar o produtor (Spring Boot)**
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+   ou, se preferir:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+3. **Executar o consumidor (C#)**
+  Se você nunca rodou um projeto em C#, você vai precisar baixar o .NET para rodar o mesmo, eu baixei a versão x64 no site: "https://dotnet.microsoft.com/en-us/download/dotnet/8.0"
+  após isso, executar os comandos:
+   ```bash
+   cd ShamelessConsumer
+   dotnet run
+   ```
+
+---
+
+## 📥 Enviando uma mensagem de teste
+
+Use o **Postman**, **Insomnia** ou **cURL** para enviar a mensagem:
+
+```bash
+curl -X POST http://localhost:8080/shameless/enviar      -H "Content-Type: application/json"      -d '{
+           "Mensagem teste"
+         }'
+```
+
+---
+
+## 📤 Verificando a mensagem recebida (Consumidor)
+
+A mensagem recebida será exibida no console do consumidor C#
+
+**Exemplo de retorno esperado:**
+
+```
+Fiona sempre esta cuidando da família! Mas parou para te enviar a mensagem: "{Aqui a mensagem que você enviou}"
+```
+
+---
+
+## ⚙️ Tecnologias utilizadas
+
+### Produtor (Java Spring Boot)
+- Spring Boot 3.x
+- Spring AMQP
+- Maven
+- RabbitMQ
+
+### Consumidor (C#)
+- .NET 8 Web API
+- RabbitMQ.Client
+- ASP.NET Core Minimal API
+
+---
+
+## 📚 Resumo da Arquitetura
+
+```
+[Spring Boot API] ---> [RabbitMQ] ---> [C# API]
+      POST                  📨               GET
+```
+
+O produtor envia mensagens sobre *Shameless* via endpoint HTTP, que são publicadas no RabbitMQ.  
+O consumidor lê da fila `fila.shameless` e disponibiliza as mensagens recebidas em um endpoint GET.
+
+---
+
+## 👩‍💻 Créditos
+
+Trabalho desenvolvido para demonstrar comunicação assíncrona entre serviços utilizando RabbitMQ.  
+Tema: **Shameless**

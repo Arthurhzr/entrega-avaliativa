@@ -47,7 +47,7 @@ public class ShamelessConsumerService
              string mensagemPersonalizada = character switch
     {
         "Frank Gallagher" => $"Frank continua bebendo.. Mas ainda assim lembrou de te falar:: {mensagemRecebida}",
-        "Fiona Gallagher" => $"Fiona sempre esta cuidando da família! Mas parou para te enviar a mensagem:: {mensagemRecebida}",
+        "Fiona Gallagher" => $"Fiona sempre esta cuidando da família! Mas parou para te enviar a mensagem: {mensagemRecebida}",
         "Lip Gallagher" => $"Lip, espero que esteja estudando! Se não, entregue a mensagem:: {mensagemRecebida}",
         "Ian Gallagher" => $"Ian, peça pro Micky passar a mensagem:: {mensagemRecebida}",
         "Debbie Gallagher" => $"Debbie sempre cumpre suas tarefas! E uma delas era enviar isso para vocÊ: {mensagemRecebida}",
